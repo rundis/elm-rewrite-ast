@@ -1,0 +1,74 @@
+import Main
+import ElmParser
+
+import Parser exposing (..)
+import Parser.LanguageKit exposing (..)
+import Parser.LowLevel exposing (..)
+import Char
+import Set exposing (Set)
+
+
+
+
+
+
+run ElmParser.spaces " "
+run ElmParser.newlines "\r\n\n"
+run ElmParser.mandatoryWSSep "\n\n "
+
+run ElmParser.optionalWSSep ""
+
+
+
+run ElmParser.exposingStatement " exposing ( Dill, Dall, jall, (++), Dall (Nisse, Nakke) ) "
+
+run ElmParser.exposingKeyword " exposing "
+
+run ElmParser.adtExposing "  Jalla  "
+
+
+
+let
+  jalla = run ElmParser.moduleDeclaration "port  \n module \n Dill exposing (   Dill, Dall, jall, (++), Dall (Nisse, Nakke) )"
+in
+  case jalla of
+    Ok decl ->
+      ElmParser.moduleDeclarationToSource decl
+    Err err ->
+        "FAILURE"
+
+
+
+
+
+
+
+
+run Main.moduleHeader
+ """module Jalla.Dill exposing ( dill, Dall, (++), Jall(..)  )   -- hallla
+
+{- Halla -}
+
+{-| This is a module doc thingie |-}
+
+ -- Some other comment stuff
+import Html
+import Html.Attributes
+ """
+
+
+run Main.importDeclarations
+ """import Html as Dill exposing (dill)\nimport Html.Attributes as Dal"""
+
+
+run Main.importDeclaration "import Html"
+
+
+run Main.multilineComment "{-| hello |-}"
+
+
+run Main.docComment
+  """{-| helle. |-}"""
+
+
+run getIndentLevel " "
